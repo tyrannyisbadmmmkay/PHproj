@@ -1,3 +1,4 @@
 openai
+# I had to run <git clone https://github.com/streamlit/streamlit.git>
 streamlit
 python-dotenv
