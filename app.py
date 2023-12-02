@@ -75,20 +75,19 @@ if st.session_state.start_chat:
     # Display existing messages in the chat
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            st.write(message["content"])
             
     # Chat input for the user
     prompt = st.chat_input("Shall we fight tyranny together?")
     
     if prompt is not None:
-        cleaned_prompt = prompt.strip()
         # Add user message to the state and display it
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
-            st.markdown(prompt),
+            st.write(prompt),
 
     # Check if the entered prompt is the keyword for triggering debate mode
-    if cleaned_prompt.lower() == 'debate_mode':
+    if prompt == 'debate_mode':
         # Prompt user for debate topic
         topic = st.text_input("I stand ever-ready to engage in invigorating and\
             thought-provoking discourse. And what shall we focus on, dear compatriot?")
