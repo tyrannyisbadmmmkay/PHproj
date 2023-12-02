@@ -78,7 +78,7 @@ if st.session_state.start_chat:
             st.write(message["content"])
             
     # Chat input for the user
-    prompt = st.chat_input("Shall we fight tyranny together?")
+    prompt = st.chat_input("Shall we speak on Freedoms and Liberties?")
     
     if prompt is not None:
         # Add user message to the state and display it
