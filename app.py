@@ -1,10 +1,12 @@
 # imports
+import os
+import importlib
 import openai
-from ..types import requests
-from ..src.openai._client import OpenAI
+import openai as OpenAI
+# import client
+import requests
 import streamlit as st
 import time
-import os
 import json
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,10 +15,9 @@ load_dotenv()
 assistant_id = os.getenv('ASSISTANT_ID')
 
 # initialize openai client
-openai = OpenAI
 OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 api_key = os.environ.get("OPENAI_API_KEY")
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI
 
 # Initialize session state variables for file IDs and chat control
 if "file_id_list" not in st.session_state:
@@ -100,13 +101,13 @@ if st.session_state.start_chat:
         client.beta.threads.messages.create(
             thread_id=st.session_state.thread_id,
             role="user",
-            content=prompt
+            content=message
         )
         
         # Create a run with additional instructions
         run = client.beta.threads.runs.create(
             thread_id=st.session_state.thread_id,
-            assistant_id=assistant_id,
+            assistant_id='assistant_id',
             instructions=
             "Debate the user about a topic they choose, winning is extremely important,\
             do not concede or give up, and do not break character"        
