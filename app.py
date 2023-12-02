@@ -1,5 +1,7 @@
 # imports
 import openai
+from ..types import requests
+from ..src.openai._client import OpenAI
 import streamlit as st
 import time
 import os
@@ -11,7 +13,10 @@ load_dotenv()
 assistant_id = os.getenv('ASSISTANT_ID')
 
 # initialize openai client
-client = openai
+openai = OpenAI
+OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+api_key = os.environ.get("OPENAI_API_KEY")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Initialize session state variables for file IDs and chat control
 if "file_id_list" not in st.session_state:
@@ -26,15 +31,6 @@ if "thread_id" not in st.session_state:
 # Set up the Streamlit page with a title and icon
 st.set_page_config(page_title="Patrick Henry", page_icon=":scroll:", layout="wide")
 st.header(":scroll: Patrick Henry")
-
-# get the OPENAI API Key
-openai_api_key_env = os.getenv('OPENAI_API_KEY')
-openai_api_key = st.sidebar.text_input(
-    'OpenAI API Key', placeholder='sk-', value=openai_api_key_env)
-url = "https://platform.openai.com/account/api-keys"
-st.sidebar.markdown("Get an Open AI Access Key [here](%s). " % url)
-if openai_api_key:
-    openai.api_key = openai_api_key
     
     # Function to handle the debate mode initiation
 def handle_debate_mode(topic):
@@ -82,14 +78,16 @@ if st.session_state.start_chat:
             
     # Chat input for the user
     prompt = st.chat_input("Shall we fight tyranny together?")
+    
     if prompt is not None:
-    # Add user message to the state and display it
+        cleaned_prompt = prompt.strip()
+        # Add user message to the state and display it
         st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+        with st.chat_message("user"):
+            st.markdown(prompt),
 
     # Check if the entered prompt is the keyword for triggering debate mode
-    if prompt.strip().lower() == 'debate_mode':
+    if cleaned_prompt.lower() == 'debate_mode':
         # Prompt user for debate topic
         topic = st.text_input("I stand ever-ready to engage in invigorating and\
             thought-provoking discourse. And what shall we focus on, dear compatriot?")
